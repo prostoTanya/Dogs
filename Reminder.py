@@ -22,6 +22,7 @@ def set():
             print(dt)
             t = dt.timestamp()
             print(t)
+            lab.config(text=f'Напоминание установлено на {hour:02}:{minute:02}')
         except Exception as e:
             mb.showerror('Ошибка', f'Произошла ошибка {e}')
 
