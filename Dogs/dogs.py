@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from  tkinter import messagebox as mb
 import  requests
 from PIL import Image, ImageTk
@@ -12,9 +13,9 @@ def get_dog_img():
         response = requests.get('https://dog.ceo/api/breeds/image/random')
         response.raise_for_status()
         data = response.json()
-        return data('message')
+        return data['message']
     except Exception as e:
-        mb.showerror('Ошибка', f'Возникла ошибка при загрузке изображения {e}')
+        mb.showerror('Ошибка', f'Возникла ошибка при запросе к API {e}')
         return None
 
 
@@ -31,20 +32,26 @@ def show_img():
             lab.config(image=img)
             lab.img = img
         except Exception as e:
-            mb.showerror('Ошибка', f'Возникла ошибка при запросе к API {e}')
+            mb.showerror('Ошибка', f'Возникла ошибка при загрузке изображения {e}')
+    progress.stop()
 
-
-
+def prog():
+    progress['value'] = 0
+    progress.start(30)
+    window.after(3000, show_img)
 
 
 window = Tk()
 window.title('Картинки с собачками')
 window.geometry('360x420')
 
-lab = Label()
+lab = ttk.Label()
 lab.pack(pady=10)
 
-but = Button(text='Загрузить изображения', command=show_img)
+but = ttk.Button(text='Загрузить изображение', command=prog)
 but.pack(pady=10)
+
+progress = ttk.Progressbar(mode='determinate', length=300)
+progress.pack(pady=10)
 
 window.mainloop()
